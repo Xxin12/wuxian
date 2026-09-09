@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+*.log
+server.out.log
+server.err.log
+.git
+.gitignore
+README.md
+启动日志.log
+test/

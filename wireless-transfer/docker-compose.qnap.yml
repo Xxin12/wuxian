@@ -1,0 +1,48 @@
+# 无线传输 - 威联通 Container Station 专用（纯 HTTP 公网部署，零写死 IP/域名）
+# 用法：Container Station → 应用程序 → 创建 → 粘贴本文件 → 创建并启动
+# 说明：
+#   - 不启用 caddy / 不启用 HTTPS（按你的要求纯 HTTP 跨网）。
+#   - TURN 中继用命令行参数启动，无需挂配置文件，GUI 部署最省事。
+#   - coturn 用 DETECT_EXTERNAL_IP=yes 自动探测公网 IP，动态 IP 变动后重启容器即可。
+
+services:
+  app:
+    image: docker.io/YOUR_DOCKERHUB_USER/wireless-transfer:latest   # 改成你的 Docker Hub 用户名；由 GitHub Actions 构建推送
+    container_name: wireless-transfer
+    restart: unless-stopped
+    # 外网高位端口(可改，如 30000) → 容器 3000；承载网页 + WebSocket 信令
+    ports:
+      - "30000:3000/tcp"
+    environment:
+      - PORT=3000
+      - STUN_SERVERS=stun:stun.l.google.com:19302
+      # TURN_URL 不写死：服务端从请求 Host 自动推导（与网页同源）
+      - TURN_USERNAME=wireless
+      - TURN_CREDENTIAL=CHANGE_THIS_TO_A_STRONG_PASSWORD
+      - TURN_PORT=34780                   # TURN 公网端口（须与下方 coturn / 路由器映射一致）
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  coturn:
+    image: coturn/coturn:latest
+    container_name: wireless-transfer-coturn
+    restart: unless-stopped
+    environment:
+      - DETECT_EXTERNAL_IP=yes           # 自动探测公网 IP 并注入 --external-ip
+    # 用命令行参数代替配置文件挂载（GUI 部署免挂盘）
+    command:
+      - "-n"
+      - "--log-file=stdout"
+      - "--listening-port=34780"
+      - "--min-port=40000"
+      - "--max-port=40010"
+      - "--lt-cred-mech"
+      - "--user=wireless:CHANGE_THIS_TO_A_STRONG_PASSWORD"
+      - "--realm=wireless.local"
+      - "--verbose"
+    ports:
+      - "34780:34780/udp"                # TURN 控制/数据
+      - "40000-40010:40000-40010/udp"    # TURN 中继端口范围

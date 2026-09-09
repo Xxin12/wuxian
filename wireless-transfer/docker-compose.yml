@@ -1,0 +1,61 @@
+# 无线传输 - Docker 编排
+# 三种用法：
+#   1) 仅应用（本机/局域网，HTTP）：        docker compose up -d
+#   2) + HTTPS 反向代理（推荐跨设备）：     docker compose --profile proxy up -d
+#   3) + TURN 中继（跨互联网传输）：         docker compose --profile proxy --profile turn up -d
+services:
+  app:
+    build: .
+    image: wireless-transfer:latest
+    container_name: wireless-transfer
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+      # ---- 跨网传输 TURN 中继（HTTP 公网部署必备，对称 NAT/跨网回退）----
+      - STUN_SERVERS=stun:stun.l.google.com:19302
+      # TURN_URL 无需写死：服务端从请求 Host 自动推导（与网页同源）。
+      # 仅当你的 TURN 公网端口≠34780 时，用下面这行显式覆盖：
+      # - TURN_URL=turn:你的域名或IP:34780
+      - TURN_USERNAME=wireless
+      - TURN_CREDENTIAL=CHANGE_THIS_TO_A_STRONG_PASSWORD
+      # TURN 公网端口（coturn listening-port 经路由器映射后的外网端口；默认 34780）
+      - TURN_PORT=34780
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # 可选：HTTPS 反向代理，让浏览器在跨设备/跨网时处于「安全上下文」（WebRTC 要求）
+  caddy:
+    image: caddy:2-alpine
+    profiles: ["proxy"]
+    container_name: wireless-transfer-caddy
+    depends_on: [app]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+  # 可选：TURN 中继服务器，跨互联网时当 P2P 直连不通时回退
+  coturn:
+    image: coturn/coturn:latest
+    profiles: ["turn"]
+    container_name: wireless-transfer-coturn
+    network_mode: host
+    environment:
+      # 自动探测公网 IP 并注入 --external-ip，省去写死 IP（动态 IP 变动后重启容器即可）
+      - DETECT_EXTERNAL_IP=yes
+    volumes:
+      - ./coturn.conf:/etc/coturn/turnserver.conf:ro
+    restart: unless_stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>无线传输</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 加入界面 -->
+  <div id="join" class="screen hidden">
+    <div class="card">
+      <h1>无线传输</h1>
+      <p class="sub">局域网 / 跨网 · P2P 文件与文本传输</p>
+      <label for="nameInput">你的名称</label>
+      <input id="nameInput" placeholder="例如：我的电脑" maxlength="32" />
+      <label for="roomInput">房间</label>
+      <input id="roomInput" placeholder="同一房间才能互相发现" maxlength="32" value="default" />
+      <button id="joinBtn">进入房间</button>
+      <p class="hint">把本页面地址发给同一房间的其他人，即可互相传输文件与文本。</p>
+    </div>
+  </div>
+
+  <!-- 主界面 -->
+  <div id="main" class="screen hidden">
+    <header>
+      <div class="brand">无线传输</div>
+      <div class="me">房间 <b id="roomLabel"></b> · 我：<b id="nameLabel"></b></div>
+      <div class="actions">
+        <button id="sendFileBtn" class="primary">📎 添加文件</button>
+        <button id="configBtn" class="ghost">⚙ 配置</button>
+        <button id="copyLink" class="ghost">复制邀请链接</button>
+        <button id="leaveBtn" class="ghost">退出</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <section class="panel peers">
+        <h2>在线设备</h2>
+        <ul id="peerList"><li class="empty">暂无其他设备，邀请同伴加入同一房间</li></ul>
+      </section>
+
+      <section class="panel chat">
+        <h2>临时聊天室</h2>
+        <div id="chatLog" class="chat-log"></div>
+        <div class="chat-input">
+          <input id="chatInput" placeholder="发条消息给房间里的所有人…" maxlength="4000" />
+          <button id="sendChat">发送</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- 待发送队列（多次单选累加，绕开系统 multiple 限制） -->
+    <section class="panel pending" id="pendingPanel" hidden>
+      <h2>待发送（<span id="pendingCount">0</span>） <span class="muted-hint">手机端可多次点“添加文件”累加，选好目标再统一发送</span></h2>
+      <ul id="pendingList"></ul>
+      <div class="pending-actions">
+        <button id="clearPending" class="ghost-btn">清空</button>
+        <button id="sendPending" class="primary">🚀 选择目标发送</button>
+      </div>
+    </section>
+
+    <section class="panel transfers">
+      <h2>传输任务</h2>
+      <ul id="transferList"><li class="empty">暂无传输</li></ul>
+    </section>
+
+    <input id="fileInput" type="file" multiple class="hidden" />
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- 选择发送方式 -->
+  <div id="peerChooser" class="overlay hidden">
+    <div class="chooser">
+      <h3>选择发送方式</h3>
+      <p class="chooser-tip">模式一：选“某个人”→ 对方<strong>自动接收下载</strong>（无需确认）<br/>模式二：选“广播给整个房间”→ 由<strong>想接收的人自行点接收</strong></p>
+      <ul id="chooserList"></ul>
+      <button id="chooserBroadcast" class="primary block">📢 广播给整个房间（对方自行选择接收）</button>
+      <button id="chooserCancel" class="ghost-btn">取消</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

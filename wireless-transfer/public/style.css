@@ -1,0 +1,168 @@
+:root {
+  --bg: #f5f7fa;
+  --panel: #ffffff;
+  --border: #e3e8ef;
+  --text: #1f2933;
+  --muted: #7b8794;
+  --primary: #2563eb;
+  --primary-d: #1d4ed8;
+  --ok: #16a34a;
+  --warn: #d97706;
+  --err: #dc2626;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+.hidden { display: none !important; }
+.screen { min-height: 100vh; }
+
+/* 加入界面 */
+#join { display: flex; align-items: center; justify-content: center; }
+.card {
+  background: var(--panel);
+  width: 360px; max-width: 92vw;
+  padding: 28px 26px;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+.card h1 { margin: 0 0 4px; font-size: 24px; }
+.card .sub { margin: 0 0 18px; color: var(--muted); }
+.card label { display: block; margin: 12px 0 6px; font-weight: 600; }
+.card input {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 14px; outline: none;
+}
+.card input:focus { border-color: var(--primary); }
+.card button {
+  width: 100%; margin-top: 18px; padding: 11px; border: none; border-radius: 8px;
+  background: var(--primary); color: #fff; font-size: 15px; cursor: pointer;
+}
+.card button:hover { background: var(--primary-d); }
+.card .hint { margin: 16px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+/* 主界面 */
+#main { display: flex; flex-direction: column; max-width: 1100px; margin: 0 auto; padding: 14px; }
+header {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 12px 16px; background: var(--panel); border-radius: 12px; border: 1px solid var(--border);
+}
+header .brand { font-size: 18px; font-weight: 700; }
+header .me { color: var(--muted); }
+header .actions { margin-left: auto; display: flex; gap: 8px; }
+.ghost {
+  border: 1px solid var(--border); background: #fff; color: var(--text);
+  padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+}
+.ghost:hover { border-color: var(--primary); color: var(--primary); }
+.primary {
+  border: none; background: var(--primary); color: #fff; padding: 7px 14px; border-radius: 8px;
+  cursor: pointer; font-size: 13px; font-weight: 600;
+}
+.primary:hover { background: var(--primary-d); }
+
+/* 选择接收设备弹窗 */
+.overlay {
+  position: fixed; inset: 0; background: rgba(15,23,42,0.45);
+  display: flex; align-items: center; justify-content: center; z-index: 60;
+}
+.chooser {
+  background: var(--panel); width: 320px; max-width: 92vw; padding: 20px 22px;
+  border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+.chooser h3 { margin: 0 0 12px; font-size: 16px; }
+.chooser ul { list-style: none; margin: 0 0 14px; padding: 0; }
+.chooser li {
+  padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px;
+  cursor: pointer; font-weight: 600;
+}
+.chooser li:hover { border-color: var(--primary); color: var(--primary); }
+.chooser .ghost-btn {
+  border: 1px solid var(--border); background: #fff; color: var(--text);
+  padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; width: 100%;
+}
+.chooser .ghost-btn:hover { border-color: var(--primary); color: var(--primary); }
+.chooser-tip { margin: -4px 0 14px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.chooser-tip strong { color: var(--text); }
+.chooser li.mode1 { display: flex; align-items: center; justify-content: space-between; }
+.chooser li.mode1 .hint { font-weight: 400; font-size: 12px; color: var(--ok); }
+.chooser .primary.block { width: 100%; margin-bottom: 10px; font-size: 13px; }
+.auto-tag { font-size: 12px; color: var(--ok); font-weight: 600; }
+
+.layout { display: grid; grid-template-columns: 1fr 1.3fr; gap: 14px; margin: 14px 0; }
+@media (max-width: 760px) { .layout { grid-template-columns: 1fr; } }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.panel h2 { margin: 0 0 10px; font-size: 15px; }
+
+/* 设备列表 */
+#peerList, #transferList { list-style: none; margin: 0; padding: 0; }
+#peerList li.peer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px;
+}
+#peerList li.empty, #transferList li.empty { color: var(--muted); padding: 8px 2px; }
+.pname { font-weight: 600; }
+
+/* 聊天室 */
+.chat-log { height: 320px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 10px; background: #fafbfc; }
+.chat-log .msg { margin-bottom: 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; }
+.chat-log .msg .who { font-weight: 600; color: var(--primary); margin-right: 0; }
+.chat-log .msg .time { color: var(--muted); font-size: 11px; margin-left: 0; }
+.chat-log .msg .text { flex: 1 1 auto; min-width: 0; word-break: break-word; }
+.chat-log .msg .copy-msg {
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  padding: 1px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; line-height: 1.6; align-self: center;
+}
+.chat-log .msg .copy-msg:hover { border-color: var(--primary); color: var(--primary); }
+.chat-log .msg.self .who { color: var(--ok); }
+.chat-input { display: flex; gap: 8px; margin-top: 10px; }
+.chat-input input { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; }
+.chat-input input:focus { border-color: var(--primary); }
+.chat-input button, .peer button, .transfer .t-actions button {
+  border: none; background: var(--primary); color: #fff; padding: 9px 14px; border-radius: 8px; cursor: pointer; font-size: 13px;
+}
+.chat-input button:hover, .peer button:hover { background: var(--primary-d); }
+
+/* 传输任务 */
+.transfer { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+.transfer .t-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.transfer .t-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.transfer .t-status { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.transfer .t-bar { height: 8px; background: #eef2f7; border-radius: 99px; margin-top: 8px; overflow: hidden; }
+.transfer .t-fill { height: 100%; width: 0%; background: var(--primary); transition: width .2s; }
+.transfer.done .t-fill { background: var(--ok); }
+.transfer.failed .t-fill { background: var(--err); }
+.transfer .t-actions { margin-top: 8px; display: flex; gap: 6px; }
+.transfer .t-actions button.ghost-btn { background: #fff; color: var(--text); border: 1px solid var(--border); padding: 6px 10px; font-size: 12px; }
+.transfer .t-actions button.ghost-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+/* 待发送队列 */
+.panel.pending { margin-bottom: 14px; }
+.panel.pending h2 .muted-hint { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 6px; }
+#pendingList { list-style: none; margin: 0 0 10px; padding: 0; }
+.pending-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px;
+}
+.pending-item .pname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%; }
+.pending-item .ghost-btn.small { padding: 4px 10px; font-size: 12px; }
+.pending-actions { display: flex; gap: 8px; }
+.pending-actions .primary { flex: 1; }
+.pending-actions .ghost-btn { padding: 8px 14px; border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 8px; cursor: pointer; font-size: 13px; }
+.pending-actions .ghost-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+/* Toast */
+.toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+  background: #1f2933; color: #fff; padding: 10px 18px; border-radius: 8px;
+  font-size: 13px; box-shadow: 0 6px 20px rgba(0,0,0,0.2); z-index: 50;
+}
+
+/* 手机端：缩减临时聊天室上下高度（放在末尾以确保覆盖上面的桌面默认 320px） */
+@media (max-width: 760px) {
+  .chat-log { height: 200px; }
+}

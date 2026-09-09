@@ -1,0 +1,34 @@
+# WorkBuddy 项目数据（非代码，不应进入版本库）
+.workbuddy/
+
+# 日志
+*.log
+server.out.log
+server.err.log
+
+# 依赖
+node_modules/
+
+# 环境变量 / 密钥
+.env
+.env.*
+*.local
+
+# 操作系统 / 编辑器垃圾文件
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# 运行时产物
+dist/
+build/
+coverage/
+
+# 非构建文件，不进仓库（本地保留）
+无线传输需求分析.md
+wireless-transfer/Caddyfile
+wireless-transfer/README.md
+wireless-transfer/start.bat
+wireless-transfer/test/
+wireless-transfer/*.log

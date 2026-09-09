@@ -1,0 +1,13 @@
+# 依赖
+node_modules/
+
+# 密钥 / 环境（真实凭证切勿提交进仓库）
+.env
+*.local.env
+
+# 日志
+*.log
+
+# OS / 编辑器
+.DS_Store
+Thumbs.db
