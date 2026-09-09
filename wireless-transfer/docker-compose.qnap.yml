@@ -27,7 +27,7 @@ services:
       retries: 3
 
   coturn:
-    image: coturn/coturn:latest
+    image: ghcr.io/xxin12/coturn:latest   # 已从 Docker Hub 转存到 GHCR（国内 NAS 拉不到 Docker Hub）
     container_name: wireless-transfer-coturn
     restart: unless-stopped
     environment:

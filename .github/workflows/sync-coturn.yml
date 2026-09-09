@@ -1,0 +1,26 @@
+name: Sync coturn to GHCR
+
+# 手动触发：把 coturn/coturn:latest 从 Docker Hub 转存到 ghcr.io/xxin12/coturn:latest
+# 用途：国内 NAS 拉不到 Docker Hub，但能稳定访问 ghcr.io，故转存后 compose 改用 GHCR 镜像
+on:
+  workflow_dispatch:
+
+permissions:
+  packages: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull from Docker Hub, retag and push to GHCR
+        run: |
+          docker pull coturn/coturn:latest
+          docker tag coturn/coturn:latest ghcr.io/xxin12/coturn:latest
+          docker push ghcr.io/xxin12/coturn:latest
