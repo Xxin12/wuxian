@@ -7,7 +7,7 @@
 
 services:
   app:
-    image: docker.io/YOUR_DOCKERHUB_USER/wireless-transfer:latest   # 改成你的 Docker Hub 用户名；由 GitHub Actions 构建推送
+    image: ghcr.io/xxin12/wireless-transfer:latest   # 由 GitHub Actions 推送到 GHCR（ghcr.io/xxin12/...）
     container_name: wireless-transfer
     restart: unless-stopped
     # 外网高位端口(可改，如 30000) → 容器 3000；承载网页 + WebSocket 信令
