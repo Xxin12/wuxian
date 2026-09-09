@@ -38,11 +38,11 @@ services:
       - "--log-file=stdout"
       - "--listening-port=34780"
       - "--min-port=40000"
-      - "--max-port=40003"
+      - "--max-port=40010"
       - "--lt-cred-mech"
       - "--user=wireless:CHANGE_THIS_TO_A_STRONG_PASSWORD"
       - "--realm=wireless.local"
       - "--verbose"
     ports:
       - "34780:34780/udp"                # TURN 控制/数据
-      - "40000-40003:40000-40003/udp"    # TURN 中继端口范围（个人使用 4 个足够；改为范围转发，路由器一条规则即可）
+      - "40000-40010:40000-40010/udp"    # TURN 中继端口范围（改为范围转发，路由器一条规则即可）
