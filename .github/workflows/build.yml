@@ -39,4 +39,5 @@ jobs:
           # 同时构建 amd64 与 arm64，覆盖大多数威联通 NAS（x86 与部分 ARM 机型）
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/wireless-transfer:latest
+          # GHCR 仓库名必须全小写；xxin12 即你的 GHCR 命名空间（与 ghcr.io/xxin12/jizhang 一致）
+          tags: ghcr.io/xxin12/wireless-transfer:latest
